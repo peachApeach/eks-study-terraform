@@ -1,11 +1,13 @@
-data "aws_availability_zones" "available" {
-  state = "available"
+resource "local_file" "abc" {
+  content  = "123!"
+  filename = "${path.module}/abc.txt"
 }
-resource "aws_subnet" "primary" {
-  availability_zone = data.aws_availability_zones.available.names[0]
-  # e.g. ap-northeast-2a
+
+data "local_file" "abc" {
+  filename = local_file.abc.filename
 }
-resource "aws_subnet" "secondary" {
-  availability_zone = data.aws_availability_zones.available.names[1]
-  # e.g. ap-northeast-2b
+
+resource "local_file" "def" {
+  content  = data.local_file.abc.content
+  filename = "${path.module}/def.txt"
 }
